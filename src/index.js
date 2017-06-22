@@ -1,7 +1,3 @@
-import CSSTransitionGroup from './CSSTransitionGroup';
-import TransitionGroup from './TransitionGroup';
+var TransitionGroup = require('./TransitionGroup');
 
-module.exports = {
-  TransitionGroup,
-  CSSTransitionGroup,
-};
+module.exports = TransitionGroup;

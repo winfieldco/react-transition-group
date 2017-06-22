@@ -1,9 +1,9 @@
-import chain from 'chain-function';
-import React from 'react';
-import warning from 'warning';
+var chain = require('chain-function');
+var React = require('react');
+var warning = require('warning');
 
-import { getChildMapping, mergeChildMappings } from './utils/ChildMapping';
-
+var getChildMapping = require('./utils/ChildMapping').getChildMapping;
+var mergeChildMappings = require('./utils/ChildMapping').mergeChildMappings;
 
 const propTypes = {
   component: React.PropTypes.any,
@@ -18,12 +18,14 @@ const defaultProps = {
 
 
 class TransitionGroup extends React.Component {
-  static displayName = 'TransitionGroup';
 
   constructor(props, context) {
     super(props, context);
 
     this.childRefs = Object.create(null);
+
+    this.performEnter = this.performEnter.bind(this);
+    this.performLeave = this.performLeave.bind(this);
 
     this.state = {
       children: getChildMapping(props.children),
@@ -52,7 +54,7 @@ class TransitionGroup extends React.Component {
     this.setState({
       children: mergeChildMappings(
         prevChildMapping,
-        nextChildMapping,
+        nextChildMapping
       ),
     });
 
@@ -85,21 +87,21 @@ class TransitionGroup extends React.Component {
     keysToLeave.forEach(this.performLeave);
   }
 
-  performAppear = (key) => {
+  performAppear(key) {
     this.currentlyTransitioningKeys[key] = true;
 
     let component = this.childRefs[key];
 
     if (component.componentWillAppear) {
       component.componentWillAppear(
-        this._handleDoneAppearing.bind(this, key),
+        this._handleDoneAppearing.bind(this, key)
       );
     } else {
       this._handleDoneAppearing(key);
     }
   };
 
-  _handleDoneAppearing = (key) => {
+  _handleDoneAppearing(key) {
     let component = this.childRefs[key];
     if (component && component.componentDidAppear) {
       component.componentDidAppear();
@@ -115,21 +117,21 @@ class TransitionGroup extends React.Component {
     }
   };
 
-  performEnter = (key) => {
+  performEnter(key) {
     this.currentlyTransitioningKeys[key] = true;
 
     let component = this.childRefs[key];
 
     if (component.componentWillEnter) {
       component.componentWillEnter(
-        this._handleDoneEntering.bind(this, key),
+        this._handleDoneEntering.bind(this, key)
       );
     } else {
       this._handleDoneEntering(key);
     }
   };
 
-  _handleDoneEntering = (key) => {
+  _handleDoneEntering(key) {
     let component = this.childRefs[key];
     if (component && component.componentDidEnter) {
       component.componentDidEnter();
@@ -145,23 +147,23 @@ class TransitionGroup extends React.Component {
     }
   };
 
-  performLeave = (key) => {
+  performLeave(key) {
     this.currentlyTransitioningKeys[key] = true;
 
     let component = this.childRefs[key];
     if (component.componentWillLeave) {
       component.componentWillLeave(this._handleDoneLeaving.bind(this, key));
     } else {
-      // Note that this is somewhat dangerous b/c it calls setState()
+      // Note that thi s is somewhat dangerous b/c it calls setState()
       // again, effectively mutating the component before all the work
       // is done.
       this._handleDoneLeaving(key);
     }
   };
 
-  _handleDoneLeaving = (key) => {
+  _handleDoneLeaving(key) {
     let component = this.childRefs[key];
-    
+
     if (component && component.componentDidLeave) {
       component.componentDidLeave();
     }
@@ -208,7 +210,7 @@ class TransitionGroup extends React.Component {
               (r) => {
                 this.childRefs[key] = r;
               }),
-          },
+          }
         ));
       }
     }
@@ -228,7 +230,7 @@ class TransitionGroup extends React.Component {
     return React.createElement(
       this.props.component,
       props,
-      childrenToRender,
+      childrenToRender
     );
   }
 }
@@ -236,4 +238,4 @@ class TransitionGroup extends React.Component {
 TransitionGroup.propTypes = propTypes;
 TransitionGroup.defaultProps = defaultProps;
 
-export default TransitionGroup;
+module.exports = TransitionGroup;

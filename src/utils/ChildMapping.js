@@ -1,5 +1,4 @@
-import { Children } from 'react';
-
+var Children = require('react').Children;
 
 /**
  * Given `this.props.children`, return an object mapping key to child.
@@ -7,7 +6,7 @@ import { Children } from 'react';
  * @param {*} children `this.props.children`
  * @return {object} Mapping of key to child
  */
-export function getChildMapping(children) {
+function getChildMapping(children) {
   if (!children) {
     return children;
   }
@@ -36,7 +35,7 @@ export function getChildMapping(children) {
  * @return {object} a key set that contains all keys in `prev` and all keys
  * in `next` in a reasonable order.
  */
-export function mergeChildMappings(prev, next) {
+function mergeChildMappings(prev, next) {
   prev = prev || {};
   next = next || {};
 
@@ -71,7 +70,7 @@ export function mergeChildMappings(prev, next) {
       for (i = 0; i < nextKeysPending[nextKey].length; i++) {
         let pendingNextKey = nextKeysPending[nextKey][i];
         childMapping[nextKeysPending[nextKey][i]] = getValueForKey(
-          pendingNextKey,
+          pendingNextKey
         );
       }
     }
@@ -84,4 +83,9 @@ export function mergeChildMappings(prev, next) {
   }
 
   return childMapping;
+}
+
+module.exports = {
+  getChildMapping: getChildMapping,
+  mergeChildMappings: mergeChildMappings,
 }
