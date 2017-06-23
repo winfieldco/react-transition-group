@@ -8,6 +8,20 @@ A ton of thanks to the React team, and contributors for writing and maintaining 
 
 The [`TransitionGroup`](#transitiongroup) add-on component is a low-level API for animation, and [`CSSTransitionGroup`](#csstransitiongroup) is an add-on component for easily implementing basic CSS animations and transitions.
 
+## Parts integration
+
+### Installation
+
+You cannot simply reference the package, it needs to be built first. If you reference the package it will not have its ES2015 syntax removed
+and will not work with uglify and various older browsers. To build follow the steps below:
+
+- Install the dependencies using "npm install"
+- Build the library using "npm run build"
+- Copy the contents of "lib" into parts-core-web's "vendor" directory in "react-transition-group".
+
+You can verify all the arrow functions etc. are gone by viewing TransitionGroup.js. The parts component TransitionGroup then includes
+this vendor version rather than the library directly from NPM.
+
 ## High-level API: CSSTransitionGroup
 
 `CSSTransitionGroup` is a high-level API based on [`TransitionGroup`](#low-level-api-transitiongroup) and is an easy way to perform CSS transitions and animations when a React component enters or leaves the DOM. It's inspired by the excellent [ng-animate](http://www.nganimate.org/) library.
